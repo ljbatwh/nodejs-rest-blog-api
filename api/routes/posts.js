@@ -6,9 +6,31 @@ const mongoose = require("mongoose");
 const Post = require("../models/post.model");
 
 router.get("/", (req, res, next) => {
-  res.status(200).json({
-    message: "Handle GET requests to posts/"
-  });
+  Post.find().then(result=>{
+    if(res){
+      console.log('if res')
+      res.status = 200;
+      res.json({
+        posts:result,
+        total:result.length
+      });
+    }else{
+      console.log('else')
+      res.status = 204;
+      res.json({
+        posts:[],
+        total:0
+      });
+    }
+  }).catch(error=>{
+    console.log('catch')
+    res.status = error.status || 500;
+    res.json({
+      error: {
+        message: error.message
+      }
+    });
+  })
 });
 
 router.post("/", (req, res, next) => {
@@ -17,7 +39,8 @@ router.post("/", (req, res, next) => {
     title: req.body.title,
     published: new Date(req.body.published),
     author: req.body.author,
-    content: req.body.content
+    content: req.body.content,
+    externalUrl:req.body.externalUrl
   });
 
   post
