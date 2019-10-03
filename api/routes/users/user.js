@@ -3,7 +3,8 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 //Import post schema
-const User = require("../models/user.model");
+const User = require("../../models/user.model");
+const Post = require("../../models/post.model");
 
 //Create a new user
 router.post("/", (req, res, next) => {
@@ -111,6 +112,36 @@ router.delete("/:userId", (req, res, next) => {
     })
     .catch(error => {
       res.status(500).json({ error: error });
+    });
+});
+
+//Get a users posts
+router.get("/:userId/posts", (req, res, next) => {
+  let userId = req.params.userId;
+  User.findById(userId)
+    .exec()
+    .then(user => {
+      if (user) {
+        Post.find()
+          .where("user")
+          .equals(userId)
+          .exec()
+          .then(posts => {
+            res.status(200).json({
+              total: posts.length,
+              user: user,
+              posts: posts
+            });
+          })
+          .catch(error => {
+            res.status(error || 500).json({ error: error });
+          });
+      } else {
+        res.status(404).json({ message: "No user found for provided id." });
+      }
+    })
+    .catch(error => {
+      res.status(error || 500).json({ error: error });
     });
 });
 

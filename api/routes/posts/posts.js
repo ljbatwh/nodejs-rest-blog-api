@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 //Import post schema
-const Post = require("../models/post.model");
+const Post = require("../../models/post.model");
 
 //Create a new post
 router.post("/", (req, res, next) => {
