@@ -4,26 +4,42 @@ const mongoose = require("mongoose");
 
 //Import post schema
 const Post = require("../../models/post.model");
+const User = require("../../models/user.model");
 
 //Create a new post
 router.post("/", (req, res, next) => {
-  const post = new Post({
-    _id: mongoose.Types.ObjectId(),
-    title: req.body.title,
-    published: new Date(req.body.published),
-    author: req.body.author,
-    content: req.body.content,
-    externalUrl: req.body.externalUrl,
-    user: req.body.user
-  });
+  User.findById(req.body.author)
+    .exec()
+    .then(author => {
+      if (author) {
+        const post = new Post({
+          _id: mongoose.Types.ObjectId(),
+          title: req.body.title,
+          published: new Date(req.body.published),
+          author: author.lastName + " " + author.firstName,
+          content: req.body.content,
+          externalUrl: req.body.externalUrl,
+          user: author._id
+        });
 
-  post
-    .save()
-    .then(result => {
-      res.status(201).json({
-        message: "Post created successfully!",
-        post: result
-      });
+        post
+          .save()
+          .then(result => {
+            res.status(201).json({
+              message: "Post created successfully!",
+              post: result
+            });
+          })
+          .catch(error => {
+            res.status(error.status || 500).json({
+              error: error
+            });
+          });
+      } else {
+        res.status(404).json({
+          message: "User not found for provided id!"
+        });
+      }
     })
     .catch(error => {
       res.status(error.status || 500).json({
