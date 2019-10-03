@@ -128,9 +128,8 @@ router.get("/:userId/posts", (req, res, next) => {
           .exec()
           .then(posts => {
             res.status(200).json({
-              total: posts.length,
-              user: user,
-              posts: posts
+              posts: posts,
+              total: posts.length
             });
           })
           .catch(error => {
