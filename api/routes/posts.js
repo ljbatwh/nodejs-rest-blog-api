@@ -8,12 +8,13 @@ const Post = require("../models/post.model");
 //Create a new post
 router.post("/", (req, res, next) => {
   const post = new Post({
-    // _id: mongoose.Types.ObjectId(),
+    _id: mongoose.Types.ObjectId(),
     title: req.body.title,
     published: new Date(req.body.published),
     author: req.body.author,
     content: req.body.content,
-    externalUrl: req.body.externalUrl
+    externalUrl: req.body.externalUrl,
+    user: req.body.user
   });
 
   post
@@ -26,9 +27,7 @@ router.post("/", (req, res, next) => {
     })
     .catch(error => {
       res.status(error.status || 500).json({
-        error: {
-          message: "Internal Server Error: " + error.message
-        }
+        error: error
       });
     });
 });

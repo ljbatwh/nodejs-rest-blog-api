@@ -10,7 +10,9 @@ const dotenv = require("dotenv");
 //Configure dotenv package
 dotenv.config();
 
-//Import routes
+//Import user routes
+const userRoutes = require("./api/routes/user");
+//Import post routes
 const postsRoutes = require("./api/routes/posts");
 
 //Mongodb connection
@@ -41,6 +43,8 @@ app.use((req, res, next) => {
 });
 
 //Routes whitch should handle requests
+app.use("/users", userRoutes);
+//Routes whitch should hand le requests
 app.use("/posts", postsRoutes);
 
 //Error handling for 404 errors
