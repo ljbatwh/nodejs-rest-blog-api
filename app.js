@@ -44,8 +44,8 @@ app.use((req, res, next) => {
 
 //Routes whitch should handle requests
 
-app.use("/users", userRoutes);
-app.use("/posts", postsRoutes);
+app.use("blog/api/users", userRoutes);
+app.use("blog/api/posts", postsRoutes);
 
 //Error handling for 404 errors
 app.use((req, res, next) => {
