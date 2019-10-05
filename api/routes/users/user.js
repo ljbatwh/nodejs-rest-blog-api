@@ -15,7 +15,7 @@ router.post("/", (req, res, next) => {
     birthDate: new Date(req.body.birthDate),
     userName: req.body.userName,
     email: req.body.email,
-    joinAt: new Date()
+    createdAt: new Date()
   });
 
   user
