@@ -8,7 +8,7 @@ const User = require("../../models/user.model");
 
 //Create a new post
 router.post("/", (req, res, next) => {
-  User.findById(req.body.author)
+  User.findById(req.body.user)
     .exec()
     .then(author => {
       if (author) {
