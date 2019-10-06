@@ -16,7 +16,7 @@ router.post("/", (req, res, next) => {
           _id: mongoose.Types.ObjectId(),
           title: req.body.title,
           published: new Date(req.body.published),
-          author: author.lastName + " " + author.firstName,
+          author: author,
           content: req.body.content,
           externalUrl: req.body.externalUrl,
           user: author._id
@@ -25,6 +25,9 @@ router.post("/", (req, res, next) => {
         post
           .save()
           .then(result => {
+            if (result["user"]) {
+              result.user = undefined;
+            }
             res.status(201).json({
               message: "Post created successfully!",
               post: result
@@ -61,7 +64,7 @@ router.get("/", (req, res, next) => {
         });
       } else {
         res.status(404).json({
-          message: "No entris found."
+          message: "No entries found."
         });
       }
     })
