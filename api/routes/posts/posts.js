@@ -13,7 +13,7 @@ router.post("/", (req, res, next) => {
     .then(author => {
       if (author) {
         const post = new Post({
-          _id: mongoose.Types.ObjectId(),
+          // _id: mongoose.Types.ObjectId(),
           title: req.body.title,
           published: new Date(req.body.published),
           author: author,

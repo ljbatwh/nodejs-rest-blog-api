@@ -8,23 +8,11 @@ const Post = require("../../schemas/post.schema");
 
 //Create a new user
 router.post("/", (req, res, next) => {
-  const user = new User({
-    _id: mongoose.Types.ObjectId(),
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    birthDate: new Date(req.body.birthDate),
-    userName: req.body.userName,
-    email: req.body.email,
-    createdAt: new Date()
-  });
-
+  const user = new User(req.body);
   user
     .save()
     .then(user => {
-      res.status(201).json({
-        message: "User created successfully!",
-        user: user
-      });
+      res.status(201).json(user);
     })
     .catch(error => {
       res.status(error.status || 500).json({
