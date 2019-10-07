@@ -27,10 +27,7 @@ router.get("/", (req, res, next) => {
     .exec()
     .then(users => {
       if (users) {
-        res.status(200).json({
-          users: users,
-          total: users.length
-        });
+        res.status(200).json(users);
       } else {
         res.status(404).json({
           message: "No users found."
@@ -115,10 +112,7 @@ router.get("/:userId/posts", (req, res, next) => {
           .equals(userId)
           .exec()
           .then(posts => {
-            res.status(200).json({
-              posts: posts,
-              total: posts.length
-            });
+            res.status(200).json(posts);
           })
           .catch(error => {
             res.status(error || 500).json({ error: error });

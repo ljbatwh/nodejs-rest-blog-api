@@ -12,26 +12,16 @@ router.post("/", (req, res, next) => {
     .exec()
     .then(author => {
       if (author) {
-        const post = new Post({
-          // _id: mongoose.Types.ObjectId(),
-          title: req.body.title,
-          published: new Date(req.body.published),
-          author: author,
-          content: req.body.content,
-          externalUrl: req.body.externalUrl,
-          user: author._id
-        });
-
+        const post = new Post(req.body);
+        post.published=new Date();
+        post.author=author;
         post
           .save()
-          .then(result => {
-            if (result["user"]) {
-              result.user = undefined;
+          .then(post => {
+            if (post["user"]) {
+              post.user = undefined;
             }
-            res.status(201).json({
-              message: "Post created successfully!",
-              post: result
-            });
+            res.status(201).json(post);
           })
           .catch(error => {
             res.status(error.status || 500).json({
@@ -56,12 +46,9 @@ router.get("/", (req, res, next) => {
   Post.find()
     .select("_id title published author content externalUrl")
     .exec()
-    .then(result => {
-      if (res) {
-        res.status(200).json({
-          posts: result,
-          total: result.length
-        });
+    .then(posts => {
+      if (posts) {
+        res.status(200).json(posts);
       } else {
         res.status(404).json({
           message: "No entries found."
@@ -85,9 +72,9 @@ router.get("/:postId", (req, res, next) => {
   Post.findById(postId)
     .select("_id title published author content externalUrl")
     .exec()
-    .then(doc => {
-      if (doc) {
-        res.status(200).json(doc);
+    .then(post => {
+      if (post) {
+        res.status(200).json(post);
       } else {
         res
           .status(404)
@@ -120,8 +107,8 @@ router.patch("/:postId", (req, res, next) => {
   Post.updateOne({ _id: postId }, { $set: updateOps })
     .select("_id title published author content externalUrl")
     .exec()
-    .then(doc => {
-      res.status(200).json(doc);
+    .then(post => {
+      res.status(200).json(post);
     })
     .catch(error => {
       res.status(500).json({ error: error });
@@ -134,7 +121,7 @@ router.delete("/:postId", (req, res, next) => {
   Post.remove({ _id: postId })
     .exec()
     .then(result => {
-      res.status(200).json(result);
+      res.status(204).json({});
     })
     .catch(error => {
       res.status(500).json({ error: error });
