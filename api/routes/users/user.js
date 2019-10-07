@@ -3,8 +3,8 @@ const router = express.Router();
 const mongoose = require("mongoose");
 
 //Import post schema
-const User = require("../../models/user.model");
-const Post = require("../../models/post.model");
+const User = require("../../schemas/user.schema");
+const Post = require("../../schemas/post.schema");
 
 //Create a new user
 router.post("/", (req, res, next) => {

@@ -1,13 +1,12 @@
-const mongoose = require("mongoose");
+class Post{
+    constructor(title,published,author,content,externalUrl,user){
+        this.title=title;
+        this.published=published;
+        this.author=author;
+        this.content=content;
+        this.externalUrl=externalUrl;
+        this.user=user;
+    }
+}
 
-const postSchema = mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  title: { type: String, required: true },
-  published: { type: String, required: true },
-  author: { type: Object, required: true },
-  content: { type: String, required: true },
-  externalUrl: { type: String, required: false },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", require: true }
-});
-
-module.exports = mongoose.model("Post", postSchema);
+module.exports = Post;

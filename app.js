@@ -52,7 +52,7 @@ app.use((req, res, next) => {
   let error = new Error();
   error.status = 404;
   error.message =
-    "404 - Not found. All requests should be under the /posts route!";
+    "404 - Not found. All requests should be under the /blog/api route!";
   next(error);
 });
 
