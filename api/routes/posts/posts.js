@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 //Import post schema
 const Post = require("../../schemas/post.schema");
 const User = require("../../schemas/user.schema");
+const { constructURL, createDir } = require("../../shared/functions/index");
 
 //Create a new post
 router.post("/", (req, res, next) => {
@@ -13,8 +14,8 @@ router.post("/", (req, res, next) => {
     .then(author => {
       if (author) {
         const post = new Post(req.body);
-        post.published=new Date();
-        post.author=author;
+        post.published = new Date();
+        post.author = author;
         post
           .save()
           .then(post => {
@@ -43,27 +44,30 @@ router.post("/", (req, res, next) => {
 
 //Get all posts
 router.get("/", (req, res, next) => {
-  Post.find()
-    .select("_id title published author content externalUrl")
-    .exec()
-    .then(posts => {
-      if (posts) {
-        res.status(200).json(posts);
-      } else {
-        res.status(404).json({
-          message: "No entries found."
-        });
-      }
-    })
-    .catch(error => {
-      console.log("catch");
-      res.status = error.status || 500;
-      res.json({
-        error: {
-          message: error.message
-        }
-      });
-    });
+  res.status(200).json({
+    path: constructURL(req, "tasos/post1/post1.md")
+  });
+  // Post.find()
+  //   .select("_id title published author content externalUrl")
+  //   .exec()
+  //   .then(posts => {
+  //     if (posts) {
+  //       res.status(200).json(posts);
+  //     } else {
+  //       res.status(404).json({
+  //         message: "No entries found."
+  //       });
+  //     }
+  //   })
+  //   .catch(error => {
+  //     console.log("catch");
+  //     res.status = error.status || 500;
+  //     res.json({
+  //       error: {
+  //         message: error.message
+  //       }
+  //     });
+  //   });
 });
 
 //Get a post by id

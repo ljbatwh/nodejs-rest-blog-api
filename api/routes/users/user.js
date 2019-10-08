@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const { createDir, removeDir } = require("../../shared/functions/index");
 
 //Import post schema
 const User = require("../../schemas/user.schema");
@@ -12,7 +13,16 @@ router.post("/", (req, res, next) => {
   user
     .save()
     .then(user => {
-      res.status(201).json(user);
+      // Creates directory for each new user
+      createDir(user.username)
+        .then(created => {
+          res.status(201).json(user);
+        })
+        .catch(error => {
+          res.status(500).json({
+            error: error
+          });
+        });
     })
     .catch(error => {
       res.status(error.status || 500).json({
@@ -90,13 +100,28 @@ router.patch("/:userId", (req, res, next) => {
 //Delete one user by id
 router.delete("/:userId", (req, res, next) => {
   let userId = req.params.userId;
-  User.remove({ _id: userId })
+  User.findById(userId)
     .exec()
     .then(user => {
-      res.status(200).json(user);
-    })
-    .catch(error => {
-      res.status(500).json({ error: error });
+      if (user) {
+        User.deleteOne({ _id: user._id })
+          .exec()
+          .then(deleteResult => {
+            removeDir(user.username)
+              .then(deleted => {
+                res.status(204).json({
+                  userDeleted: deleteResult,
+                  fileDeleted: deleted
+                });
+              })
+              .catch(error => {
+                res.status(500).json(error);
+              });
+          })
+          .catch(error => {
+            res.status(500).json({ error: error });
+          });
+      }
     });
 });
 

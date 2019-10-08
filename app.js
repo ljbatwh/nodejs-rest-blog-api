@@ -4,7 +4,7 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-
+const path = require("path");
 const dotenv = require("dotenv");
 const cors = require("cors");
 
@@ -19,7 +19,8 @@ const postsRoutes = require("./api/routes/posts/posts");
 //Mongodb connection
 mongoose.connect(process.env.CONNECTION_STRING + process.env.DB_NAME, {
   useUnifiedTopology: true,
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useCreateIndex: true
 });
 
 //Setup morgan midleware
@@ -31,20 +32,8 @@ app.use(bodyParser.json());
 
 //Handling CORS errors
 app.use(cors());
-// app.use((req, res, next) => {
-//   req.header("Access-Control-Allow-Origin", "*");
-//   req.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//   );
-//   if (req.method === "OPTIONS") {
-//     res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, GET, DELETE");
-//     res.status(200).json({});
-//   }
-//   next();
-// });
-
-//Routes whitch should handle requests
+//Serve static files
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/blog/api/users", userRoutes);
 app.use("/blog/api/posts", postsRoutes);
