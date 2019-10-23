@@ -1,3 +1,6 @@
+#### This is not completed yet! I am Working on it!
+___
+
 ## A blog API build with node.js, express, mongoose and mongodb.
 **Documentation - Blog API - v0.1**
 
