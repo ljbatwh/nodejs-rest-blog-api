@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 //Import routes
 const userRoutes = require("./api/v1/routes/user.rutes");
+const postRoutes = require("./api/v1/routes/post.routes");
 const categoryRoutes = require("./api/v1/routes/category.rutes");
 
 mongoose
@@ -29,6 +30,7 @@ app.use(morgan("dev"));
 
 // Routes
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 
 //Error handling
